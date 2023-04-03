@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SQL Query Form</title>
+  </head>
+  <body>
+    <h1>Enter an SQL Query</h1>
+    <form action="/execute" method="post">
+      <label for="query">SQL Query:</label>
+      <br>
+      <textarea id="query" name="query" rows="10" cols="50"></textarea>
+      <br><br>
+      <input type="submit" value="Submit">
+    </form>
+
+    <div id="result">
+      <h2>Query Result:</h2>
+      <table id="result-table">
+        <thead>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+      const form = document.querySelector('form');
+      const resultTable = document.getElementById("result-table");
+      const tbody = resultTable.querySelector('tbody');
+
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const data = new FormData(form);
+        fetch('/execute', {
+          method: 'POST',
+          body: data,
+        })
+        .then(response => response.text())
+        .then(data => {
+          // Set the result HTML as the response text
+          tbody.innerHTML = data;
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          resultText.innerText = 'An error occurred while executing the query.';
+        });
+      });
+    </script>
+  </body>
+</html>
